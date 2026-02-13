@@ -50,12 +50,4 @@ autoinstall:
         uri: http://archive.ubuntu.com/ubuntu
 
   updates: security
-
-  preserve_hostname: false
-
-  runcmd:
-    - |
-      HOST=$(dmidecode -s system-product-name)
-      hostnamectl set-hostname "$HOST"
-
   shutdown: poweroff

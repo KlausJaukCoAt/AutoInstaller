@@ -42,10 +42,4 @@ qm set $vmid --sata2 nvme-iso:iso/virtio-win.iso,media=cdrom
 qm set $vmid --boot order='sata0;scsi0;sata1;sata2'
 
 # Set Bios Serialnumber
-qm set $vmid --smbios1 uuid="$uuid",serial="$serial",product="$name",family="Virtuell",manufacturer="ProxmoxVE"
-
-# Enable the next line to start the VM after creation
-qm start $vmid
-
-# Change Bootorder for next start and unmount disks
-qm set $vmid --boot order='scsi0'
+qm set $vmid --smbios1 uuid="$uuid",serial="$serial",product="Windows-Client",family="Virtuell",manufacturer="ProxmoxVE"

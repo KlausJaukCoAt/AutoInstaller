@@ -28,26 +28,14 @@ qm create $vmid \
   --scsihw virtio-scsi-single \
   --scsi0 nvme:64 \
   --net0 virtio,bridge=vmbr0,firewall=1 \
-  --ostype $ostype
+  --ostype $ostype \
+  --tags 'Linux,Ubuntu' \
+  --boot order='sata0;sata1;scsi0' \
+  --smbios1 uuid="$uuid",serial="$serial",product='LinuxServer',family='Virtuell',manufacturer='ProxmoxVE'
 
-# Set Hostname over system-product-name, user-data.yaml configured
-qm set $vmid --name $name
-
-# Set Tags
-qm set $vmid --tags 'Linux,Ubuntu24.04.LTS'
 
 # Mount Image and Driver
 qm set $vmid --sata0 nvme-iso:iso/ubuntu-24.04.3-live-server-amd64.iso,media=cdrom
 qm set $vmid --sata1 nvme-iso:iso/AutoInstall_Ubuntu.iso,media=cdrom
 
-#Set Bootorder
-qm set $vmid --boot order='sata0;sata1;scsi0'
 
-# Set Bios Serialnumber
-qm set $vmid --smbios1 uuid="$uuid",serial="$serial",product="$name",family="Virtuell",manufacturer="ProxmoxVE"
-
-# Enable the next line to start the VM after creation
-qm start $vmid
-
-# Change Bootorder for next start and unmount disks
-qm set $vmid --boot order='scsi0'
