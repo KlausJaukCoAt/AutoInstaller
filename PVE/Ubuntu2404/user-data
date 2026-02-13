@@ -1,0 +1,61 @@
+#cloud-config
+autoinstall:
+  version: 1
+  interactive-sections: []
+
+  locale: de_AT.UTF-8
+  keyboard:
+    layout: de
+    variant: nodeadkeys
+
+  identity:
+    hostname: ubuntu-server
+    username: klaus
+    realname: "Klaus Jauk"
+    password: "$6$F/bkBAs.JxppQsP0$qsdYBXS7/1ScrW.FEVBkA.YyEj9DhOwIbkvKw4Din1YAPITW.PkTLulWO5xlKqbd9hzSbafYdUau0JtOgUVUy1"
+    # Passwort: "Pa$$w0rd" (SHA-512 Hash)
+
+  ssh:
+    install-server: true
+    allow-pw: true
+
+  network:
+    network:
+      version: 2
+      ethernets:
+        enp6s18:
+          dhcp4: true
+
+  storage:
+    layout:
+      name: lvm
+
+  packages: []
+
+  late-commands:
+    - curtin in-target -- apt-get update
+    - curtin in-target -- apt-get install -y qemu-guest-agent htop curl wget git
+    - curtin in-target --target=/target systemctl enable qemu-guest-agent
+    - curtin in-target --target=/target systemctl start qemu-guest-agent
+
+  user-data:
+    disable_root: false
+
+  timezone: Europe/Vienna
+
+  apt:
+    preserve_sources_list: false
+    primary:
+      - arches: [amd64]
+        uri: http://archive.ubuntu.com/ubuntu
+
+  updates: security
+
+  preserve_hostname: false
+
+  runcmd:
+    - |
+      HOST=$(dmidecode -s system-product-name)
+      hostnamectl set-hostname "$HOST"
+
+  shutdown: poweroff
